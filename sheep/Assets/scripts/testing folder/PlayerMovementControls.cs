@@ -35,6 +35,15 @@ public partial class @PlayerMovementControls: IInputActionCollection2, IDisposab
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""croutch"",
+                    ""type"": ""Button"",
+                    ""id"": ""1aa61272-dc19-497b-885a-f4c538db7ae2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -48,6 +57,17 @@ public partial class @PlayerMovementControls: IInputActionCollection2, IDisposab
                     ""action"": ""move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3cd7aa88-c74c-45a9-9c31-d650b729be3d"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""croutch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -57,6 +77,7 @@ public partial class @PlayerMovementControls: IInputActionCollection2, IDisposab
         // CharacterMovement
         m_CharacterMovement = asset.FindActionMap("CharacterMovement", throwIfNotFound: true);
         m_CharacterMovement_move = m_CharacterMovement.FindAction("move", throwIfNotFound: true);
+        m_CharacterMovement_croutch = m_CharacterMovement.FindAction("croutch", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -119,11 +140,13 @@ public partial class @PlayerMovementControls: IInputActionCollection2, IDisposab
     private readonly InputActionMap m_CharacterMovement;
     private List<ICharacterMovementActions> m_CharacterMovementActionsCallbackInterfaces = new List<ICharacterMovementActions>();
     private readonly InputAction m_CharacterMovement_move;
+    private readonly InputAction m_CharacterMovement_croutch;
     public struct CharacterMovementActions
     {
         private @PlayerMovementControls m_Wrapper;
         public CharacterMovementActions(@PlayerMovementControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @move => m_Wrapper.m_CharacterMovement_move;
+        public InputAction @croutch => m_Wrapper.m_CharacterMovement_croutch;
         public InputActionMap Get() { return m_Wrapper.m_CharacterMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -136,6 +159,9 @@ public partial class @PlayerMovementControls: IInputActionCollection2, IDisposab
             @move.started += instance.OnMove;
             @move.performed += instance.OnMove;
             @move.canceled += instance.OnMove;
+            @croutch.started += instance.OnCroutch;
+            @croutch.performed += instance.OnCroutch;
+            @croutch.canceled += instance.OnCroutch;
         }
 
         private void UnregisterCallbacks(ICharacterMovementActions instance)
@@ -143,6 +169,9 @@ public partial class @PlayerMovementControls: IInputActionCollection2, IDisposab
             @move.started -= instance.OnMove;
             @move.performed -= instance.OnMove;
             @move.canceled -= instance.OnMove;
+            @croutch.started -= instance.OnCroutch;
+            @croutch.performed -= instance.OnCroutch;
+            @croutch.canceled -= instance.OnCroutch;
         }
 
         public void RemoveCallbacks(ICharacterMovementActions instance)
@@ -163,5 +192,6 @@ public partial class @PlayerMovementControls: IInputActionCollection2, IDisposab
     public interface ICharacterMovementActions
     {
         void OnMove(InputAction.CallbackContext context);
+        void OnCroutch(InputAction.CallbackContext context);
     }
 }

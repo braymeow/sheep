@@ -6,14 +6,19 @@ using UnityEngine;
 public class PlayerInputControler : MonoBehaviour
 {
     //data numbers for running
-    [SerializeField] private float Speed;
+    [SerializeField] private float Speed,jumpspeed;
+    [SerializeField] private LayerMask ground; 
 
     private PlayerMovementControls playerMovementControls;
+    private Rigidbody rigidbody;
+    private Collider collider;
 
 
     private void Awake()
     {
         playerMovementControls = new PlayerMovementControls();
+        rigidbody = GetComponent<Rigidbody>();
+        collider = GetComponent<Collider>();
     }
 
     private void OnEnable()
@@ -28,8 +33,25 @@ public class PlayerInputControler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        playerMovementControls.CharacterMovement.croutch.performed += _ => Crountch();
     }
+
+    private void Croutch()
+    {
+        if (IsGrounded()) { 
+            rigidbody.AddForce(new Vector3 (0, jumpspeed), ForceMode.Impulse)
+
+        }
+            
+    }
+
+    private bool IsGrounded()
+    {
+        Vector3 
+
+        return Physics.OverlapBox();
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -40,6 +62,5 @@ public class PlayerInputControler : MonoBehaviour
         Vector3 currentPosition = transform.position;
         currentPosition.x += movementinput * Speed * Time.deltaTime;
         transform.position = currentPosition;
-        transform.position.x += 3f
     }
 }
